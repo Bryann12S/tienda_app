@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 38,
+            "stock": 17,
             "activo": true
         },
         {
@@ -42,6 +42,62 @@
         },
         {
             "id": 6,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 7,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 8,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 9,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 10,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 11,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 12,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 13,
             "nombre": "Arroz",
             "precio_compra": 0.0,
             "precio_venta": 1.0,
@@ -109,8 +165,189 @@
                 }
             ],
             "total": 2.5
+        },
+        {
+            "id": 5,
+            "fecha": "2026-04-07 14:37:56",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 6,
+            "fecha": "2026-04-07 14:38:30",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 7,
+            "fecha": "2026-04-07 14:40:57",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 8,
+            "fecha": "2026-04-07 14:43:46",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 9,
+            "fecha": "2026-04-07 14:45:31",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 10,
+            "fecha": "2026-04-07 14:51:50",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 11,
+            "fecha": "2026-04-07 14:54:39",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
         }
     ],
     "gastos": [],
-    "deudores": []
+    "deudores": [
+        {
+            "id": 1,
+            "nombre": "Bryan",
+            "fecha": "2026-04-07 14:45:31",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                },
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 3,
+                    "subtotal": 3.0
+                }
+            ],
+            "total": 5.5,
+            "estado": "pagado"
+        },
+        {
+            "id": 2,
+            "nombre": "Bryan",
+            "fecha": "2026-04-07 14:51:50",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                },
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 3,
+                    "subtotal": 3.0
+                }
+            ],
+            "total": 5.5,
+            "estado": "pendiente"
+        },
+        {
+            "id": 3,
+            "nombre": "Bryan",
+            "fecha": "2026-04-07 14:54:39",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                },
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 3,
+                    "subtotal": 3.0
+                }
+            ],
+            "total": 5.5,
+            "estado": "pendiente"
+        }
+    ]
 }

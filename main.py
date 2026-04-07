@@ -1,9 +1,12 @@
 from controllers.producto_controller import ProductoController
 from controllers.venta_controller import VentaController
+from controllers.deudor_controller import DeudorController
+
 
 def main():
     controller = ProductoController()
     venta_controller = VentaController()
+    deudor_controller = DeudorController()
 
     print("=== CREAR PRODUCTO ===")
 
@@ -44,6 +47,16 @@ def main():
 
     venta_controller.calcular_ganancia_total()
     venta_controller.ganancia_por_dia("2026-04-07")
+
+    deudor_controller.crear_fiado(
+        "Bryan", 
+        [
+            {"id": 1, "cantidad": 2},
+            {"id": 2, "cantidad": 3}
+        ]
+    )
+
+    deudor_controller.marcar_como_pagado(1)
                                                  
 
 if __name__ == "__main__":

@@ -1,0 +1,105 @@
+from models.deudor import Deudor
+from models.venta import ItemVenta
+from controllers.producto_controller import ProductoController
+import json
+import os
+from datetime import datetime
+
+class DeudorController:
+    def __init__(self, archivo="data/data.json"):
+        self.archivo = archivo
+        self.producto_controller = ProductoController()
+
+    def crear_fiado(self, nombre_cliente, items_data):
+
+        if os.path.exists(self.archivo):
+            with open(self.archivo, "r") as f:
+                datos = json.load(f)
+        else:
+            datos = {"productos": [], "ventas": [], "gastos": [], "deudores": []}
+
+        items = []
+        total = 0
+
+        for item in items_data:
+            producto = self.producto_controller.buscar_producto_por_id(item["id"])
+
+            if not producto:
+                print("❌ Producto no encontrado")
+                return
+            
+            if not producto.activo:
+                print("❌ Producto inactivo")
+                return
+            
+            if producto.stock < item["cantidad"]:
+                print(f"❌ Stock insuficiente para {producto.nombre}")
+                return
+            
+            #crear Itemventa
+            item_venta = ItemVenta(
+                producto.id,
+                producto.nombre,
+                producto.precio_venta,
+                producto.precio_compra,
+                item["cantidad"]
+            )
+
+            items.append(item_venta)
+            total += item_venta.calcular_subtotal()
+        
+        deudor = Deudor(
+            id = len(datos.get("deudores", [])) + 1,
+            nombre = nombre_cliente,
+            fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            items = items,
+            total = total
+        )
+
+        #Actualizar stock
+        for item in items:
+            producto = self.producto_controller.buscar_producto_por_id(item.producto_id)
+            producto.stock -= item.cantidad
+            self.producto_controller.actualizar_producto(producto)
+
+        datos["deudores"].append(deudor.to_dict())
+
+        with open(self.archivo, "w") as f:
+            json.dump(datos, f, indent=4)
+
+        print("✅ Fiado creado exitosamente")
+    
+    def marcar_como_pagado(self, id_deudor):
+
+        with open(self.archivo, "r") as f:
+            datos = json.load(f)
+        deudores = datos.get("deudores", [])
+
+        for d in deudores:
+            if d["estado"] == "pagado":
+                print("❌ Deuda ya pagada")
+                return
+
+            if d["id"] == id_deudor:
+                d["estado"] = "pagado"
+                break
+        
+        with open(self.archivo, "w") as f:
+            json.dump(datos, f, indent=4)
+        
+        print("✅ Deuda marcado como pagada")
+    
+    def listar_deuddas_pendientes(self):
+
+        with open(self.archivo, "r") as f:
+            datos = json.load(f)
+            
+        deudores = datos.get("deudores", [])
+
+        for d in deudores:
+            if d["estado"] == "pendiente":
+                print(f"ID: {d['id']}")
+                print(f"Nombre: {d['nombre']}")
+                print(f"Fecha: {d['fecha']}")
+                print(f"Total: {d['total']}")
+                print("--------------------")
