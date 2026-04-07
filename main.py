@@ -7,12 +7,12 @@ def main():
 
     print("=== CREAR PRODUCTO ===")
 
-     #  controller.crear_producto(
-     #       "Arroz",
-     #       0.00,
-     #       1.09,
-     #       50
-     #   )
+    controller.crear_producto(
+           "Arroz",
+           0.00,
+           1.00,
+           25
+    )
 
     print("Producto creado\n")
     
@@ -41,6 +41,8 @@ def main():
     venta_controller.crear_venta([
         {"id": 1, "cantidad": 2},
     ])
+
+    venta_controller.calcular_ganancia_total()
                                                  
 
 if __name__ == "__main__":

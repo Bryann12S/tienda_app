@@ -17,7 +17,7 @@ class ItemVenta:
         return {
             "producto_id":self.producto_id,
             "nombre":self.nombre,
-            "precio":self.precio_venta,
+            "precio_venta":self.precio_venta,
             "precio_compra":self.precio_compra,
             "cantidad":self.cantidad,
             "subtotal":self.calcular_subtotal()

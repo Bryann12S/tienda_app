@@ -2,41 +2,44 @@
     "productos": [
         {
             "id": 1,
-            "nombre": "Arroz",
+            "nombre": "Leche",
             "precio_compra": 0.0,
-            "precio_venta": 1.0,
-            "stock": 21,
+            "precio_venta": 1.25,
+            "stock": 47,
             "activo": true
         },
         {
             "id": 2,
             "nombre": "Arroz",
             "precio_compra": 0.0,
-            "precio_venta": 1.09,
-            "stock": 50
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
         },
         {
             "id": 3,
             "nombre": "Arroz",
             "precio_compra": 0.0,
-            "precio_venta": 1.09,
-            "stock": 50
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
         }
     ],
     "ventas": [
         {
             "id": 1,
-            "fecha": "2026-04-07 01:55:23",
+            "fecha": "2026-04-07 13:52:48",
             "items": [
                 {
                     "producto_id": 1,
-                    "nombre": "Arroz",
-                    "precio": 1.0,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
                     "cantidad": 2,
-                    "subtotal": 2.0
+                    "subtotal": 2.5
                 }
             ],
-            "total": 2.0
+            "total": 2.5
         }
     ],
     "gastos": [],

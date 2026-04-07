@@ -16,7 +16,7 @@ class Database:
             with open(self.path, "r") as f:
                 return json.load(f)
         except:
-            return {"productos: []"}
+            return {"productos": [], "ventas": [], "gastos": [], "deudores": []}
         
     def guardar_datos(self, datos):
         with open(self.path, "w") as f:

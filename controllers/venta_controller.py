@@ -21,6 +21,7 @@ class VentaController:
         with open(self.archivo, "w") as f:
             json.dump(datos, f, indent=4)
 
+
     def _generar_id(self):
         datos = self.cargar_datos()
 
@@ -82,3 +83,18 @@ class VentaController:
         self.guardar_datos(datos)
 
         print("✅ Venta creada exitosamente")
+    
+    def calcular_ganancia_total(self):
+        datos = self.cargar_datos()
+
+        ventas = datos.get("ventas", [])
+
+        total = 0
+
+        for v in ventas:
+
+            for item in v["items"]:
+                ganancia = (item["precio_venta"] - item["precio_compra"]) * item["cantidad"]
+                total += ganancia
+
+        print(f"Ganancia total: {total}")
