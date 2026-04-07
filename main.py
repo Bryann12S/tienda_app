@@ -1,12 +1,14 @@
 from controllers.producto_controller import ProductoController
 from controllers.venta_controller import VentaController
 from controllers.deudor_controller import DeudorController
+from controllers.gasto_controller import GastoController
 
 
 def main():
     controller = ProductoController()
     venta_controller = VentaController()
     deudor_controller = DeudorController()
+    gasto_controller = GastoController()
 
     print("=== CREAR PRODUCTO ===")
 
@@ -57,6 +59,9 @@ def main():
     )
 
     deudor_controller.marcar_como_pagado(1)
+
+    gasto_controller.crear_gasto("Arroz", 1.00)
+    gasto_controller.listar_gastos()
                                                  
 
 if __name__ == "__main__":

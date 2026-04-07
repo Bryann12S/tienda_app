@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 17,
+            "stock": 14,
             "activo": true
         },
         {
@@ -98,6 +98,14 @@
         },
         {
             "id": 13,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 14,
             "nombre": "Arroz",
             "precio_compra": 0.0,
             "precio_venta": 1.0,
@@ -270,9 +278,31 @@
                 }
             ],
             "total": 2.5
+        },
+        {
+            "id": 12,
+            "fecha": "2026-04-07 16:14:49",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
         }
     ],
-    "gastos": [],
+    "gastos": [
+        {
+            "id": 1,
+            "descripcion": "Arroz",
+            "monto": 1.0,
+            "fecha": "2026-04-07 16:14:49"
+        }
+    ],
     "deudores": [
         {
             "id": 1,
@@ -328,6 +358,31 @@
             "id": 3,
             "nombre": "Bryan",
             "fecha": "2026-04-07 14:54:39",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                },
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 3,
+                    "subtotal": 3.0
+                }
+            ],
+            "total": 5.5,
+            "estado": "pendiente"
+        },
+        {
+            "id": 4,
+            "nombre": "Bryan",
+            "fecha": "2026-04-07 16:14:49",
             "items": [
                 {
                     "producto_id": 1,
