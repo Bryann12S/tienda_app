@@ -1,7 +1,9 @@
 from controllers.producto_controller import ProductoController
+from controllers.venta_controller import VentaController
 
 def main():
     controller = ProductoController()
+    venta_controller = VentaController()
 
     print("=== CREAR PRODUCTO ===")
 
@@ -36,6 +38,9 @@ def main():
 
     controller.vender_producto(1,3)
     
+    venta_controller.crear_venta([
+        {"id": 1, "cantidad": 2},
+    ])
                                                  
 
 if __name__ == "__main__":

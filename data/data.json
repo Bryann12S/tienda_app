@@ -5,7 +5,7 @@
             "nombre": "Arroz",
             "precio_compra": 0.0,
             "precio_venta": 1.0,
-            "stock": 47,
+            "stock": 21,
             "activo": true
         },
         {
@@ -22,5 +22,23 @@
             "precio_venta": 1.09,
             "stock": 50
         }
-    ]
+    ],
+    "ventas": [
+        {
+            "id": 1,
+            "fecha": "2026-04-07 01:55:23",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Arroz",
+                    "precio": 1.0,
+                    "cantidad": 2,
+                    "subtotal": 2.0
+                }
+            ],
+            "total": 2.0
+        }
+    ],
+    "gastos": [],
+    "deudores": []
 }
