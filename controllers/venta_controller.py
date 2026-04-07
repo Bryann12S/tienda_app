@@ -98,3 +98,20 @@ class VentaController:
                 total += ganancia
 
         print(f"Ganancia total: {total}")
+
+    def ganancia_por_dia(self, fecha_busqueda):
+        datos = self.cargar_datos()
+
+        ventas = datos.get("ventas", [])
+
+        total = 0
+
+        for v in ventas: 
+            fecha_venta = v["fecha"].split(" ")[0] #quitamos la hora
+
+            if fecha_venta == fecha_busqueda:
+                for item in v["items"]:
+                    ganancia = (item["precio_venta"] - item["precio_compra"]) * item["cantidad"]
+                    total += ganancia
+            
+            print(f"💰 Ganancia del dia {fecha_busqueda}: {total}")

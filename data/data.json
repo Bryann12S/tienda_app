@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 47,
+            "stock": 38,
             "activo": true
         },
         {
@@ -23,12 +23,81 @@
             "precio_venta": 1.0,
             "stock": 25,
             "activo": true
+        },
+        {
+            "id": 4,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 5,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
+        },
+        {
+            "id": 6,
+            "nombre": "Arroz",
+            "precio_compra": 0.0,
+            "precio_venta": 1.0,
+            "stock": 25,
+            "activo": true
         }
     ],
     "ventas": [
         {
             "id": 1,
             "fecha": "2026-04-07 13:52:48",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 2,
+            "fecha": "2026-04-07 14:06:36",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 3,
+            "fecha": "2026-04-07 14:06:54",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.5
+                }
+            ],
+            "total": 2.5
+        },
+        {
+            "id": 4,
+            "fecha": "2026-04-07 14:07:37",
             "items": [
                 {
                     "producto_id": 1,

@@ -43,6 +43,7 @@ def main():
     ])
 
     venta_controller.calcular_ganancia_total()
+    venta_controller.ganancia_por_dia("2026-04-07")
                                                  
 
 if __name__ == "__main__":
