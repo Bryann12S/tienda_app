@@ -26,9 +26,29 @@ def abrir_producto_view():
     def agregar():
         controller.crear_producto(
             entry_nombre.get(),
-            entry_precio_compra.get(),
-            entry_precio_venta.get(),
-            entry_stock.get()
+            float(entry_precio_compra.get()),
+            float(entry_precio_venta.get()),
+            int(entry_stock.get())
         )
     
     tk.Button(ventana, text="Guardar", command=agregar).pack()
+
+    frame_lista = tk.Frame(ventana)
+    frame_lista.pack()
+
+    def mostrar_productos():
+        
+        productos = controller.listar_productos()
+        
+        for p in productos:
+            print(p.nombre, p.stock) #prueba    
+
+        #limpiar frame_lista
+        for widget in frame_lista.winfo_children():
+            widget.destroy()
+
+        for p in productos:
+            texto = f"{p.id} - {p.nombre} - Stock: {p.stock}"
+            tk.Label(frame_lista, text=texto).pack()
+
+    tk.Button(ventana, text="Mostrar productos", command=mostrar_productos).pack()
