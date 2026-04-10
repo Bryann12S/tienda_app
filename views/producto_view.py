@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from controllers.producto_controller import ProductoController
 
 controller = ProductoController()
@@ -30,25 +31,36 @@ def abrir_producto_view():
             float(entry_precio_venta.get()),
             int(entry_stock.get())
         )
+        mostrar_productos()
     
     tk.Button(ventana, text="Guardar", command=agregar).pack()
 
     frame_lista = tk.Frame(ventana)
     frame_lista.pack()
 
+    tabla = ttk.Treeview(ventana, columns=("ID", "Nombre", "Precio", "Stock"), show="headings")
+    
+    tabla.heading("ID", text="ID")
+    tabla.heading("Nombre", text="Nombre")
+    tabla.heading("Precio", text="Precio Venta")
+    tabla.heading("Stock", text="Stock")
+
+    tabla.pack()
+
     def mostrar_productos():
-        
-        productos = controller.listar_productos()
-        
-        for p in productos:
-            print(p.nombre, p.stock) #prueba    
 
         #limpiar frame_lista
-        for widget in frame_lista.winfo_children():
-            widget.destroy()
+        for fila in tabla.get_children():
+            tabla.delete(fila)
+
+        productos = controller.listar_productos()
 
         for p in productos:
-            texto = f"{p.id} - {p.nombre} - Stock: {p.stock}"
-            tk.Label(frame_lista, text=texto).pack()
+            tabla.insert("", "end", values=(
+                p.id,
+                p.nombre,
+                p.precio_venta,
+                p.stock
+            ))
 
     tk.Button(ventana, text="Mostrar productos", command=mostrar_productos).pack()

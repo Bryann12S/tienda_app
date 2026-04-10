@@ -111,6 +111,14 @@
             "precio_venta": 1.0,
             "stock": 25,
             "activo": true
+        },
+        {
+            "id": 15,
+            "nombre": "Panes",
+            "precio_compra": 1.0,
+            "precio_venta": 0.2,
+            "stock": 8,
+            "activo": true
         }
     ],
     "ventas": [
