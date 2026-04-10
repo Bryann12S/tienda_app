@@ -31,5 +31,6 @@ class Producto:
             data["nombre"],
             data["precio_compra"],
             data["precio_venta"],
-            data["stock"]
+            data["stock"],
+            data.get("activo", True)
         )

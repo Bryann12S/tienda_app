@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 14,
+            "stock": 13,
             "activo": true
         },
         {
@@ -22,7 +22,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 4,
@@ -30,7 +30,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 5,
@@ -38,7 +38,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 6,
@@ -46,7 +46,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 7,
@@ -54,7 +54,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 8,
@@ -62,7 +62,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 9,
@@ -70,7 +70,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 10,
@@ -78,7 +78,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 11,
@@ -86,7 +86,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 12,
@@ -94,7 +94,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 13,
@@ -102,7 +102,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 14,
@@ -110,7 +110,7 @@
             "precio_compra": 0.0,
             "precio_venta": 1.0,
             "stock": 25,
-            "activo": true
+            "activo": false
         },
         {
             "id": 15,

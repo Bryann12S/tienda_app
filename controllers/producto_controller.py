@@ -28,17 +28,18 @@ class ProductoController:
         productos = []
 
         for data in productos_data:
-            producto = Producto.from_dict(data)
-            productos.append(producto)
+            if data.get("activo", True):
+                producto = Producto.from_dict(data)
+                productos.append(producto)
 
         return productos
     
     def _generar_id(self):
-        productos = self.listar_productos()
-        if not productos:
+        productos_data = self.db.obtener_productos()
+        if not productos_data:
             return 1
         
-        ultimo_id = max(p.id for p in productos)
+        ultimo_id = max(p["id"] for p in productos_data)
 
         return ultimo_id + 1
 
@@ -69,7 +70,7 @@ class ProductoController:
 
         for p in productos:
             
-            if ["id"] == id_producto:
+            if p["id"] == id_producto:
                 p["activo"] = False
                 break
 
