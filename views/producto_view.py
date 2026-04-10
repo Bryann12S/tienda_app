@@ -1,8 +1,10 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from controllers.producto_controller import ProductoController
+from controllers.venta_controller import VentaController
 
-controller = ProductoController()
+controller_producto = ProductoController()
+controller_venta = VentaController()
 
 def abrir_producto_view():
     ventana = tk.Toplevel()
@@ -42,19 +44,19 @@ def abrir_producto_view():
 
         if id_editando:
            
-           producto = controller.buscar_producto_por_id(id_editando)
+           producto = controller_producto.buscar_producto_por_id(id_editando)
 
            producto.nombre = entry_nombre.get()
            producto.precio_compra = float(entry_precio_compra.get())
            producto.precio_venta = float(entry_precio_venta.get())
            producto.stock = int(entry_stock.get())
 
-           controller.actualizar_producto(producto)
+           controller_producto.actualizar_producto(producto)
            
            id_editando = None
 
         else:
-            controller.crear_producto(
+            controller_producto.crear_producto(
                 entry_nombre.get(),
                 float(entry_precio_compra.get()),
                 float(entry_precio_venta.get()),
@@ -86,7 +88,7 @@ def abrir_producto_view():
         for fila in tabla.get_children():
             tabla.delete(fila)
 
-        productos = controller.listar_productos()
+        productos = controller_producto.listar_productos()
 
         for p in productos:
             tabla.insert("", "end", values=(
@@ -119,7 +121,7 @@ def abrir_producto_view():
         if not id_producto:
             return
 
-        producto = controller.buscar_producto_por_id(id_producto)
+        producto = controller_producto.buscar_producto_por_id(id_producto)
 
         nonlocal id_editando
         id_editando = id_producto
@@ -146,7 +148,7 @@ def abrir_producto_view():
         if not id_producto:
             return
 
-        controller.desactivar_producto(id_producto)
+        controller_producto.desactivar_producto(id_producto)
         mostrar_productos()
 
     tk.Button(ventana, text="Eliminar", command=eliminar_producto).pack()
@@ -168,8 +170,27 @@ def abrir_producto_view():
             print("Cantidad inválida")
             return
 
-        controller.vender_producto(id_producto, cantidad)
+        producto = controller_producto.buscar_producto_por_id(id_producto)
         
+        if producto.stock < cantidad:
+            print("No hay stock suficiente")
+            return
+
+        #crear item de venta
+        item = {
+            "id": id_producto,
+            "nombre": producto.nombre,
+            "cantidad": cantidad,
+            "precio_compra": producto.precio_compra,
+            "precio_venta": producto.precio_venta
+        }
+
+        #registrar venta
+        controller_venta.crear_venta([item])
+
+        #bajar stock
+        controller_producto.vender_producto(id_producto, cantidad)
+
         mostrar_productos()
 
     tk.Button(ventana, text="Vender", command=vender_producto).pack()
