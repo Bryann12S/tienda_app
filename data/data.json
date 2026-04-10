@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 13,
+            "stock": 12,
             "activo": true
         },
         {
@@ -13,7 +13,7 @@
             "nombre": "Arroz",
             "precio_compra": 0.0,
             "precio_venta": 1.0,
-            "stock": 25,
+            "stock": 24,
             "activo": true
         },
         {
@@ -117,7 +117,7 @@
             "nombre": "Panes",
             "precio_compra": 1.0,
             "precio_venta": 0.2,
-            "stock": 7,
+            "stock": 4,
             "activo": true
         }
     ],
@@ -316,6 +316,37 @@
                 }
             ],
             "total": 0.2
+        },
+        {
+            "id": 14,
+            "fecha": "2026-04-10 16:25:08",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 1,
+                    "subtotal": 1.25
+                },
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 1,
+                    "subtotal": 1.0
+                },
+                {
+                    "producto_id": 15,
+                    "nombre": "Panes",
+                    "precio_venta": 0.2,
+                    "precio_compra": 1.0,
+                    "cantidad": 3,
+                    "subtotal": 0.6000000000000001
+                }
+            ],
+            "total": 2.85
         }
     ],
     "gastos": [
