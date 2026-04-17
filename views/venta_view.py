@@ -135,7 +135,7 @@ def abrir_venta_view():
     tabla_carrito.pack()
 
     # ========================
-    # ELIMINAR DEL CARRITO
+    # ACCIONES DEL CARRITO
     # ========================
     def eliminar_del_carrito():
         seleccion = tabla_carrito.selection()
@@ -147,7 +147,46 @@ def abrir_venta_view():
         carrito.pop(indice)
         actualizar_carrito()
 
-    tk.Button(ventana, text="Eliminar seleccionado", command=eliminar_del_carrito).pack()
+    def aumentar_cantidad():
+        seleccion = tabla_carrito.selection()
+        if not seleccion:
+            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
+            return
+            
+        indice = tabla_carrito.index(seleccion[0])
+        item_carrito = carrito[indice]
+        
+        producto = producto_controller.buscar_producto_por_id(item_carrito["id"])
+        if producto.stock <= item_carrito["cantidad"]:
+            messagebox.showerror("Error", "Stock insuficiente")
+            return
+            
+        item_carrito["cantidad"] += 1
+        actualizar_carrito()
+
+    def disminuir_cantidad():
+        seleccion = tabla_carrito.selection()
+        if not seleccion:
+            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
+            return
+            
+        indice = tabla_carrito.index(seleccion[0])
+        item_carrito = carrito[indice]
+        
+        if item_carrito["cantidad"] > 1:
+            item_carrito["cantidad"] -= 1
+            actualizar_carrito()
+        else:
+            if messagebox.askyesno("Eliminar", "¿Deseas eliminar el producto del carrito?"):
+                carrito.pop(indice)
+                actualizar_carrito()
+
+    frame_acciones_carrito = tk.Frame(ventana)
+    frame_acciones_carrito.pack(pady=5)
+
+    tk.Button(frame_acciones_carrito, text="➖ Disminuir", command=disminuir_cantidad).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_acciones_carrito, text="➕ Aumentar", command=aumentar_cantidad).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_acciones_carrito, text="Eliminar seleccionado", command=eliminar_del_carrito).pack(side=tk.LEFT, padx=5)
 
     # ========================
     # TOTAL, PAGO Y CAMBIO

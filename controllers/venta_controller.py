@@ -83,6 +83,10 @@ class VentaController:
         self.guardar_datos(datos)
 
         print("✅ Venta creada exitosamente")
+
+    def obtener_ventas(self):
+        datos = self.cargar_datos()
+        return datos.get("ventas", [])
     
     def calcular_ganancia_total(self):
         datos = self.cargar_datos()

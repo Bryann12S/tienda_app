@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 12,
+            "stock": 8,
             "activo": true
         },
         {
@@ -362,6 +362,21 @@
                 }
             ],
             "total": 0.2
+        },
+        {
+            "id": 16,
+            "fecha": "2026-04-17 14:53:58",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 4,
+                    "subtotal": 5.0
+                }
+            ],
+            "total": 5.0
         }
     ],
     "gastos": [
