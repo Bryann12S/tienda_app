@@ -105,17 +105,42 @@ class VentaController:
 
     def ganancia_por_dia(self, fecha_busqueda):
         datos = self.cargar_datos()
-
         ventas = datos.get("ventas", [])
-
         total = 0
 
         for v in ventas: 
-            fecha_venta = v["fecha"].split(" ")[0] #quitamos la hora
+            fecha_venta = v["fecha"].split(" ")[0]
 
             if fecha_venta == fecha_busqueda:
                 for item in v["items"]:
                     ganancia = (item["precio_venta"] - item["precio_compra"]) * item["cantidad"]
                     total += ganancia
             
-            print(f"💰 Ganancia del dia {fecha_busqueda}: {total}")
+        print(f"💰 Ganancia del dia {fecha_busqueda}: {total}")
+        return total
+
+    def obtener_producto_mas_vendido(self, fecha=None):
+        datos = self.cargar_datos()
+        ventas = datos.get("ventas", [])
+        
+        cantidades = {}
+        for v in ventas:
+            if fecha and v["fecha"].split(" ")[0] != fecha:
+                continue
+            
+            for item in v["items"]:
+                nombre = item["nombre"]
+                cant = item["cantidad"]
+                cantidades[nombre] = cantidades.get(nombre, 0) + cant
+                
+        if not cantidades:
+            return "Ninguno", 0
+            
+        mejor_producto = max(cantidades, key=cantidades.get)
+        return mejor_producto, cantidades[mejor_producto]
+
+    def obtener_ventas_por_fecha(self, fecha=None):
+        ventas = self.obtener_ventas()
+        if not fecha:
+            return ventas
+        return [v for v in ventas if v["fecha"].split(" ")[0] == fecha]
