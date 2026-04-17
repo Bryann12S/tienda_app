@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import os
+from datetime import datetime
 from controllers.producto_controller import ProductoController
 from controllers.venta_controller import VentaController
 
@@ -89,6 +91,15 @@ def abrir_venta_view():
 
         producto = producto_controller.buscar_producto_por_id(id_producto)
 
+        for item in carrito:
+            if item["id"] == producto.id:
+                if producto.stock < item["cantidad"] + cantidad:
+                    messagebox.showerror("Error", "Stock insuficiente")
+                    return
+                item["cantidad"] += cantidad
+                actualizar_carrito()
+                return
+
         if producto.stock < cantidad:
             messagebox.showerror("Error", "Stock insuficiente")
             return
@@ -124,10 +135,51 @@ def abrir_venta_view():
     tabla_carrito.pack()
 
     # ========================
-    # TOTAL
+    # ELIMINAR DEL CARRITO
+    # ========================
+    def eliminar_del_carrito():
+        seleccion = tabla_carrito.selection()
+        if not seleccion:
+            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
+            return
+            
+        indice = tabla_carrito.index(seleccion[0])
+        carrito.pop(indice)
+        actualizar_carrito()
+
+    tk.Button(ventana, text="Eliminar seleccionado", command=eliminar_del_carrito).pack()
+
+    # ========================
+    # TOTAL, PAGO Y CAMBIO
     # ========================
     label_total = tk.Label(ventana, text="Total: $0")
     label_total.pack()
+
+    frame_pago = tk.Frame(ventana)
+    frame_pago.pack()
+    
+    tk.Label(frame_pago, text="Pago Cliente:").pack(side=tk.LEFT)
+    entry_pago = tk.Entry(frame_pago)
+    entry_pago.pack(side=tk.LEFT)
+    
+    label_cambio = tk.Label(ventana, text="Cambio: $0")
+    label_cambio.pack()
+    
+    def calcular_cambio():
+        total = sum((item["cantidad"] * item["precio_venta"]) for item in carrito)
+        try:
+            pago = float(entry_pago.get())
+            if pago < total:
+                messagebox.showerror("Error", "El pago es menor al total")
+                return None
+            cambio = pago - total
+            label_cambio.config(text=f"Cambio: ${cambio:.2f}")
+            return pago, cambio
+        except ValueError:
+            messagebox.showerror("Error", "Monto de pago inválido")
+            return None
+
+    tk.Button(ventana, text="Calcular Cambio", command=calcular_cambio).pack()
 
     # ========================
     # ACTUALIZAR CARRITO
@@ -162,18 +214,47 @@ def abrir_venta_view():
             messagebox.showwarning("Aviso", "Carrito vacío")
             return
 
+        resultado_pago = calcular_cambio()
+        if not resultado_pago:
+            return
+
+        pago, cambio = resultado_pago
+        total = sum((item["cantidad"] * item["precio_venta"]) for item in carrito)
+
         # guardar venta
         venta_controller.crear_venta(carrito)
+
+        # generar ticket
+        if not os.path.exists("tickets"):
+            os.makedirs("tickets")
+            
+        fecha = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        nombre_ticket = f"tickets/ticket_{fecha}.txt"
+        
+        with open(nombre_ticket, "w") as file:
+            file.write("=== TICKET DE COMPRA ===\n")
+            file.write(f"Fecha: {fecha}\n")
+            file.write("-" * 25 + "\n")
+            for item in carrito:
+                subtotal = item['cantidad'] * item['precio_venta']
+                file.write(f"{item['nombre']} x{item['cantidad']} - ${subtotal:.2f}\n")
+            file.write("-" * 25 + "\n")
+            file.write(f"Total: ${total:.2f}\n")
+            file.write(f"Pago: ${pago:.2f}\n")
+            file.write(f"Cambio: ${cambio:.2f}\n")
+            file.write("========================\n")
 
         # actualizar stock
         for item in carrito:
             producto_controller.vender_producto(item["id"], item["cantidad"])
 
-        messagebox.showinfo("Éxito", "Venta realizada")
+        messagebox.showinfo("Éxito", f"Venta realizada\nTicket generado: {nombre_ticket}")
 
         carrito.clear()
         actualizar_carrito()
         cargar_productos()
+        entry_pago.delete(0, tk.END)
+        label_cambio.config(text="Cambio: $0")
 
     tk.Button(ventana, text="Confirmar venta", command=confirmar_venta).pack()
 

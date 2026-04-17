@@ -117,7 +117,7 @@
             "nombre": "Panes",
             "precio_compra": 1.0,
             "precio_venta": 0.2,
-            "stock": 4,
+            "stock": 3,
             "activo": true
         }
     ],
@@ -347,6 +347,21 @@
                 }
             ],
             "total": 2.85
+        },
+        {
+            "id": 15,
+            "fecha": "2026-04-16 20:28:29",
+            "items": [
+                {
+                    "producto_id": 15,
+                    "nombre": "Panes",
+                    "precio_venta": 0.2,
+                    "precio_compra": 1.0,
+                    "cantidad": 1,
+                    "subtotal": 0.2
+                }
+            ],
+            "total": 0.2
         }
     ],
     "gastos": [
