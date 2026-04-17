@@ -487,6 +487,23 @@
             ],
             "total": 5.5,
             "estado": "pendiente"
+        },
+        {
+            "id": 5,
+            "nombre": "Nelson",
+            "fecha": "2026-04-17 15:35:39",
+            "items": [
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 2,
+                    "subtotal": 2.0
+                }
+            ],
+            "total": 2.0,
+            "estado": "pagado"
         }
     ]
 }
