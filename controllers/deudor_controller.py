@@ -70,36 +70,37 @@ class DeudorController:
         print("✅ Fiado creado exitosamente")
     
     def marcar_como_pagado(self, id_deudor):
+        if not os.path.exists(self.archivo):
+            return False, "No hay datos"
 
         with open(self.archivo, "r") as f:
             datos = json.load(f)
         deudores = datos.get("deudores", [])
 
+        encontrado = False
         for d in deudores:
-            if d["estado"] == "pagado":
-                print("❌ Deuda ya pagada")
-                return
-
             if d["id"] == id_deudor:
+                encontrado = True
+                if d.get("estado", "pendiente") == "pagado":
+                    return False, "La deuda ya figura como pagada"
                 d["estado"] = "pagado"
                 break
         
+        if not encontrado:
+            return False, "Deudor no encontrado"
+
         with open(self.archivo, "w") as f:
             json.dump(datos, f, indent=4)
         
-        print("✅ Deuda marcado como pagada")
+        return True, "Deuda marcada como pagada"
     
+    def obtener_deudores(self):
+        if os.path.exists(self.archivo):
+            with open(self.archivo, "r") as f:
+                datos = json.load(f)
+            return datos.get("deudores", [])
+        return []
+
     def listar_deuddas_pendientes(self):
-
-        with open(self.archivo, "r") as f:
-            datos = json.load(f)
-            
-        deudores = datos.get("deudores", [])
-
-        for d in deudores:
-            if d["estado"] == "pendiente":
-                print(f"ID: {d['id']}")
-                print(f"Nombre: {d['nombre']}")
-                print(f"Fecha: {d['fecha']}")
-                print(f"Total: {d['total']}")
-                print("--------------------")
+        deudores = self.obtener_deudores()
+        return [d for d in deudores if d.get("estado", "pendiente") == "pendiente"]
