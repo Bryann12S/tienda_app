@@ -5,44 +5,96 @@ from controllers.venta_controller import VentaController
 venta_controller = VentaController()
 
 def abrir_historial_view():
+
     ventana = tk.Toplevel()
     ventana.title("Historial de Ventas")
-    ventana.geometry("600x400")
+    ventana.geometry("800x500")
 
-    tk.Label(ventana, text="Historial de Ventas", font=("Arial", 14, "bold")).pack(pady=10)
-
-    # Tabla
-    tabla_ventas = ttk.Treeview(
+    # ========================
+    # TABLA VENTAS
+    # ========================
+    tabla = ttk.Treeview(
         ventana,
-        columns=("ID", "Fecha", "Total P.", "Total $"),
+        columns=("ID", "Fecha", "Total"),
         show="headings"
     )
 
-    tabla_ventas.heading("ID", text="ID Venta")
-    tabla_ventas.heading("Fecha", text="Fecha")
-    tabla_ventas.heading("Total P.", text="Cant. Productos")
-    tabla_ventas.heading("Total $", text="Total Venta")
+    tabla.heading("ID", text="ID")
+    tabla.heading("Fecha", text="Fecha")
+    tabla.heading("Total", text="Total")
 
-    # Configurar columnas
-    tabla_ventas.column("ID", width=80, anchor="center")
-    tabla_ventas.column("Fecha", width=180, anchor="center")
-    tabla_ventas.column("Total P.", width=100, anchor="center")
-    tabla_ventas.column("Total $", width=120, anchor="center")
+    tabla.pack(fill="both", expand=True)
 
-    tabla_ventas.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+    # ========================
+    # DETALLE
+    # ========================
+    tabla_detalle = ttk.Treeview(
+        ventana,
+        columns=("Nombre", "Cantidad", "Precio", "Subtotal"),
+        show="headings"
+    )
 
-    # Cargar datos
-    ventas = venta_controller.obtener_ventas()
-    
-    for v in ventas:
-        cantidad_productos = sum(item["cantidad"] for item in v.get("items", []))
-        total_venta = sum(item["cantidad"] * item["precio_venta"] for item in v.get("items", []))
-        
-        tabla_ventas.insert("", "end", values=(
-            v.get("id", ""),
-            v.get("fecha", ""),
-            cantidad_productos,
-            f"${total_venta:.2f}"
-        ))
+    tabla_detalle.heading("Nombre", text="Nombre")
+    tabla_detalle.heading("Cantidad", text="Cantidad")
+    tabla_detalle.heading("Precio", text="Precio")
+    tabla_detalle.heading("Subtotal", text="Subtotal")
 
-    tk.Button(ventana, text="Cerrar", command=ventana.destroy).pack(pady=10)
+    tabla_detalle.pack(fill="both", expand=True)
+
+    # ========================
+    # CARGAR VENTAS
+    # ========================
+    def cargar_ventas():
+
+        for fila in tabla.get_children():
+            tabla.delete(fila)
+
+        ventas = venta_controller.obtener_ventas()
+
+        for v in ventas:
+
+            total = 0
+            for item in v["items"]:
+                total += item["cantidad"] * item["precio_venta"]
+
+            tabla.insert("", "end", values=(
+                v["id"],
+                v["fecha"],
+                round(total, 2)
+            ))
+
+    # ========================
+    # MOSTRAR DETALLE
+    # ========================
+    def mostrar_detalle(event):
+
+        seleccion = tabla.selection()
+
+        if not seleccion:
+            return
+
+        item = tabla.item(seleccion[0])
+        id_venta = item["values"][0]
+
+        ventas = venta_controller.obtener_ventas()
+
+        for fila in tabla_detalle.get_children():
+            tabla_detalle.delete(fila)
+
+        for v in ventas:
+            if v["id"] == id_venta:
+
+                for item in v["items"]:
+
+                    subtotal = item["cantidad"] * item["precio_venta"]
+
+                    tabla_detalle.insert("", "end", values=(
+                        item["nombre"],
+                        item["cantidad"],
+                        item["precio_venta"],
+                        subtotal
+                    ))
+
+    tabla.bind("<<TreeviewSelect>>", mostrar_detalle)
+
+    cargar_ventas()
