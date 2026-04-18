@@ -65,6 +65,14 @@ class DeudorController:
             producto.stock -= item.cantidad
             self.producto_controller.actualizar_producto(producto)
 
+        # Volver a cargar los datos porque producto_controller ya modificó data.json
+        if os.path.exists(self.archivo):
+            with open(self.archivo, "r") as f:
+                datos = json.load(f)
+
+        if "deudores" not in datos:
+            datos["deudores"] = []
+            
         datos["deudores"].append(deudor.to_dict())
 
         with open(self.archivo, "w") as f:

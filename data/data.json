@@ -5,7 +5,7 @@
             "nombre": "Leche",
             "precio_compra": 0.0,
             "precio_venta": 1.25,
-            "stock": 8,
+            "stock": 7,
             "activo": true
         },
         {
@@ -125,7 +125,7 @@
             "nombre": "Big Cola Peque\u00f1a",
             "precio_compra": 5.0,
             "precio_venta": 0.25,
-            "stock": 25,
+            "stock": 21,
             "activo": true
         }
     ],
@@ -532,6 +532,44 @@
             "id": 6,
             "nombre": "Alicia",
             "fecha": "2026-04-17 20:14:13",
+            "items": [
+                {
+                    "producto_id": 16,
+                    "nombre": "Big Cola Peque\u00f1a",
+                    "precio_venta": 0.25,
+                    "precio_compra": 5.0,
+                    "cantidad": 4,
+                    "subtotal": 1.0
+                }
+            ],
+            "total": 1.0,
+            "estado": "pagado",
+            "abonado": 1.0,
+            "fecha_limite": "2026-04-20"
+        },
+        {
+            "id": 7,
+            "nombre": "Test",
+            "fecha": "2026-04-17 20:21:07",
+            "items": [
+                {
+                    "producto_id": 1,
+                    "nombre": "Leche",
+                    "precio_venta": 1.25,
+                    "precio_compra": 0.0,
+                    "cantidad": 1,
+                    "subtotal": 1.25
+                }
+            ],
+            "total": 1.25,
+            "estado": "pendiente",
+            "abonado": 0.0,
+            "fecha_limite": "2026-12-31"
+        },
+        {
+            "id": 8,
+            "nombre": "Alex",
+            "fecha": "2026-04-17 20:23:04",
             "items": [
                 {
                     "producto_id": 16,
