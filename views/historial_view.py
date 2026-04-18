@@ -116,34 +116,7 @@ def abrir_historial_view(parent):
 
     tabla_detalle.pack(fill=BOTH, expand=True)
 
-    def marcar_pagado():
-        seleccion = tabla.selection()
-        if not seleccion:
-            return
-            
-        item = tabla.item(seleccion[0])
-        id_str = str(item["values"][0])
-        
-        if id_str.startswith("F-"):
-            id_deudor = int(id_str.replace("F-", ""))
-            estado = item["values"][3]
-            if estado.lower() == "pagado":
-                messagebox.showinfo("Aviso", "Esta cuenta ya está pagada.")
-                return
-                
-            if messagebox.askyesno("Confirmar", "¿Marcar esta deuda como pagada?"):
-                exito, msg = deudor_controller.marcar_como_pagado(id_deudor)
-                if exito:
-                    messagebox.showinfo("Éxito", msg)
-                    fecha_filtro = date_picker.entry.get().strip() if date_picker.entry.get().strip() else None
-                    if fecha_filtro and (len(fecha_filtro) != 10 or fecha_filtro.count("-") != 2):
-                        fecha_filtro = None
-                    cargar_ventas_y_reportes(fecha_filtro)
-                else:
-                    messagebox.showerror("Error", msg)
 
-    btn_pagar = tb.Button(frame_detalle, text="💲 Marcar Deuda como Pagada", bootstyle="success", command=marcar_pagado)
-    btn_pagar.pack(pady=10)
 
     # ========================
     # CARGAR VENTAS Y REPORTES

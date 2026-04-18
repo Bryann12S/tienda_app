@@ -10,7 +10,7 @@ class DeudorController:
         self.archivo = archivo
         self.producto_controller = ProductoController()
 
-    def crear_fiado(self, nombre_cliente, items_data):
+    def crear_fiado(self, nombre_cliente, items_data, fecha_limite=None):
 
         if os.path.exists(self.archivo):
             with open(self.archivo, "r") as f:
@@ -53,7 +53,10 @@ class DeudorController:
             nombre = nombre_cliente,
             fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             items = items,
-            total = total
+            total = total,
+            estado = "pendiente",
+            abonado = 0.0,
+            fecha_limite = fecha_limite
         )
 
         #Actualizar stock
@@ -69,6 +72,41 @@ class DeudorController:
 
         print("✅ Fiado creado exitosamente")
     
+    def abonar_a_deuda(self, id_deudor, monto_abono):
+        if not os.path.exists(self.archivo):
+            return False, "No hay datos"
+
+        with open(self.archivo, "r") as f:
+            datos = json.load(f)
+        deudores = datos.get("deudores", [])
+
+        encontrado = False
+        for d in deudores:
+            if d.get("id") == id_deudor:
+                encontrado = True
+                estado = d.get("estado", "pendiente")
+                if estado == "pagado":
+                    return False, "La deuda ya está totalmente pagada."
+                
+                abonado_actual = d.get("abonado", 0.0)
+                total = d.get("total", 0.0)
+                
+                nuevo_abonado = abonado_actual + monto_abono
+                if nuevo_abonado >= total:
+                    d["abonado"] = total
+                    d["estado"] = "pagado"
+                else:
+                    d["abonado"] = nuevo_abonado
+                break
+        
+        if not encontrado:
+            return False, "Deudor no encontrado"
+
+        with open(self.archivo, "w") as f:
+            json.dump(datos, f, indent=4)
+        
+        return True, "Abono registrado exitosamente"
+
     def marcar_como_pagado(self, id_deudor):
         if not os.path.exists(self.archivo):
             return False, "No hay datos"
@@ -84,6 +122,7 @@ class DeudorController:
                 if d.get("estado", "pendiente") == "pagado":
                     return False, "La deuda ya figura como pagada"
                 d["estado"] = "pagado"
+                d["abonado"] = d.get("total", 0.0)
                 break
         
         if not encontrado:

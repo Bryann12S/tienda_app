@@ -142,27 +142,6 @@ def abrir_venta_view(parent):
     label_total = tb.Label(panel_factura, text="Total: $0.00", font=("Arial", 20, "bold"), bootstyle="inverse-primary")
     label_total.pack(fill=X, pady=5)
 
-    # Fiado vs Pago Normal
-    es_fiado_var = tb.BooleanVar()
-    
-    def toggle_fiado():
-        if es_fiado_var.get():
-            entry_pago.config(state="disabled")
-            btn_cambio.config(state="disabled")
-            entry_cliente.config(state="normal")
-        else:
-            entry_pago.config(state="normal")
-            btn_cambio.config(state="normal")
-            entry_cliente.config(state="disabled")
-
-    frame_check = tb.Frame(panel_factura)
-    frame_check.pack(fill=X, pady=5)
-    tb.Checkbutton(frame_check, text="¿Venta a Crédito (Fiado)?", variable=es_fiado_var, command=toggle_fiado, bootstyle="warning-round-toggle").pack(side=LEFT)
-    
-    tb.Label(frame_check, text="Cliente:").pack(side=LEFT, padx=(15, 5))
-    entry_cliente = tb.Entry(frame_check, state="disabled")
-    entry_cliente.pack(side=LEFT, fill=X, expand=True)
-
     frame_pago = tb.Frame(panel_factura)
     frame_pago.pack(fill=X, pady=5)
     tb.Label(frame_pago, text="Efectivo Recibido: $").pack(side=LEFT)
@@ -213,21 +192,6 @@ def abrir_venta_view(parent):
             messagebox.showwarning("Aviso", "Carrito vacío")
             return
         total = sum((i["cantidad"] * i["precio_venta"]) for i in carrito)
-
-        if es_fiado_var.get():
-            cliente = entry_cliente.get().strip()
-            if not cliente:
-                messagebox.showerror("Error", "Ingresa el nombre del cliente para el fiado.")
-                return
-            deudor_controller.crear_fiado(cliente, carrito)
-            messagebox.showinfo("Éxito", f"Cuenta Fiada creada para el cliente: {cliente}\nMonto Total: ${total:.2f}")
-            carrito.clear()
-            actualizar_carrito()
-            cargar_productos()
-            entry_cliente.delete(0, END)
-            es_fiado_var.set(False)
-            toggle_fiado()
-            return
 
         resultado_pago = calcular_cambio()
         if not resultado_pago: return
