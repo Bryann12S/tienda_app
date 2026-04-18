@@ -119,6 +119,14 @@
             "precio_venta": 0.2,
             "stock": 3,
             "activo": true
+        },
+        {
+            "id": 16,
+            "nombre": "Big Cola Peque\u00f1a",
+            "precio_compra": 5.0,
+            "precio_venta": 0.25,
+            "stock": 25,
+            "activo": true
         }
     ],
     "ventas": [

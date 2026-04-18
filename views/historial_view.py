@@ -21,13 +21,13 @@ def abrir_historial_view(parent):
     frame_filtros = tb.LabelFrame(frame_top, text="Filtros")
     frame_filtros.pack(side=LEFT, fill=Y, padx=(0, 10))
     
-    tb.Label(frame_filtros, text="Fecha (YYYY-MM-DD):").pack(anchor=W)
+    tb.Label(frame_filtros, text="Seleccionar Fecha:").pack(anchor=W)
     
     frame_input = tb.Frame(frame_filtros)
     frame_input.pack(fill=X, pady=5)
     
-    entry_fecha = tb.Entry(frame_input, width=15)
-    entry_fecha.pack(side=LEFT, padx=(0, 5))
+    date_picker = tb.DateEntry(frame_input, bootstyle="primary", dateformat="%Y-%m-%d")
+    date_picker.pack(side=LEFT, padx=(0, 5))
 
     # Métricas
     frame_metricas = tb.LabelFrame(frame_top, text="Resumen Financiero")
@@ -50,7 +50,7 @@ def abrir_historial_view(parent):
 
     # Funciones de filtrado y reporte
     def aplicar_filtro():
-        fecha = entry_fecha.get().strip()
+        fecha = date_picker.entry.get().strip()
         if fecha:
             if len(fecha) != 10 or fecha.count("-") != 2:
                 messagebox.showerror("Error", "Formato de fecha inválido. Usa YYYY-MM-DD")
@@ -61,7 +61,7 @@ def abrir_historial_view(parent):
         cargar_ventas_y_reportes(fecha)
 
     def limpiar_filtro():
-        entry_fecha.delete(0, 'end')
+        date_picker.entry.delete(0, 'end')
         cargar_ventas_y_reportes(None)
 
     tb.Button(frame_input, text="🔍 Filtrar", command=aplicar_filtro, bootstyle="primary").pack(side=LEFT)
@@ -135,7 +135,7 @@ def abrir_historial_view(parent):
                 exito, msg = deudor_controller.marcar_como_pagado(id_deudor)
                 if exito:
                     messagebox.showinfo("Éxito", msg)
-                    fecha_filtro = entry_fecha.get().strip() if entry_fecha.get().strip() else None
+                    fecha_filtro = date_picker.entry.get().strip() if date_picker.entry.get().strip() else None
                     if fecha_filtro and (len(fecha_filtro) != 10 or fecha_filtro.count("-") != 2):
                         fecha_filtro = None
                     cargar_ventas_y_reportes(fecha_filtro)
