@@ -1,5 +1,6 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import ttkbootstrap as tb
+from ttkbootstrap.constants import *
+import tkinter.messagebox as messagebox
 import os
 from datetime import datetime
 from controllers.producto_controller import ProductoController
@@ -10,123 +11,53 @@ producto_controller = ProductoController()
 venta_controller = VentaController()
 deudor_controller = DeudorController()
 
-def abrir_venta_view():
-
-    ventana = tk.Toplevel()
-    ventana.title("Ventas")
-    ventana.geometry("700x600")
-
-    # ========================
-    # IMPLEMENTACIÓN DE SCROLL
-    # ========================
-    main_frame = tk.Frame(ventana)
-    main_frame.pack(fill=tk.BOTH, expand=1)
-
-    canvas = tk.Canvas(main_frame)
-    canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
-
-    scrollbar = tk.Scrollbar(main_frame, orient=tk.VERTICAL, command=canvas.yview)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-    canvas.configure(yscrollcommand=scrollbar.set)
-    
-    # Este frame alojará todo el contenido tradicional de la vista
-    scrollable_frame = tk.Frame(canvas)
-    
-    canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-    # Funciones para adaptar el tamaño y región de scroll
-    def on_frame_configure(event):
-        canvas.configure(scrollregion=canvas.bbox("all"))
-
-    scrollable_frame.bind("<Configure>", on_frame_configure)
-    
-    def on_canvas_configure(event):
-        # Hace que el interior se expanda para abarcar todo el canvas horizontalmente
-        canvas.itemconfig(canvas_window, width=event.width)
-        
-    canvas.bind('<Configure>', on_canvas_configure)
-
-    # Scrollear con la rueda del ratón
-    def _on_mousewheel(event):
-        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-        
-    # Usar bind_all puede afectar otras ventanas si están abiertas, 
-    # pero para simplificar lo limitamos al foco actual si es posible.
-    # En Windows, bind_all es común para Treeviews/Canvas
-    ventana.bind_all("<MouseWheel>", _on_mousewheel)
-
+def abrir_venta_view(parent):
+    ventana = parent
     carrito = []
 
-    # ========================
-    # TABLA PRODUCTOS
-    # ========================
-    tabla_productos = ttk.Treeview(
-        scrollable_frame,
-        columns=("ID", "Nombre", "Precio", "Stock"),
-        show="headings"
-    )
+    # Layout: Izquierda (Catálogo), Derecha (Carrito y Check-out)
+    frame_izq = tb.LabelFrame(ventana, text="Catálogo de Productos")
+    frame_izq.pack(side=LEFT, fill=BOTH, expand=True, padx=10, pady=10)
 
+    frame_der = tb.LabelFrame(ventana, text="Carrito de Compras y Facturación")
+    frame_der.pack(side=LEFT, fill=BOTH, expand=True, padx=10, pady=10)
+
+    # ========================
+    # IZQUIERDA: CATÁLOGO
+    # ========================
+    tabla_productos = tb.Treeview(frame_izq, columns=("ID", "Nombre", "Precio", "Stock"), show="headings", bootstyle="primary")
     tabla_productos.heading("ID", text="ID")
     tabla_productos.heading("Nombre", text="Nombre")
     tabla_productos.heading("Precio", text="Precio")
     tabla_productos.heading("Stock", text="Stock")
+    tabla_productos.column("ID", width=50, anchor=CENTER)
+    tabla_productos.column("Stock", width=80, anchor=CENTER)
+    
+    tabla_productos.pack(fill=BOTH, expand=True, pady=(0, 10))
 
-    tabla_productos.pack(fill="x", padx=10, pady=10)
+    frame_agregar = tb.Frame(frame_izq)
+    frame_agregar.pack(fill=X)
 
-    # ========================
-    # CARGAR PRODUCTOS
-    # ========================
-    def cargar_productos():
+    tb.Label(frame_agregar, text="Cant:", font=("Arial", 12)).pack(side=LEFT, padx=5)
+    entry_cantidad = tb.Entry(frame_agregar, width=10)
+    entry_cantidad.pack(side=LEFT, padx=5)
+    entry_cantidad.insert(0, "1")
 
-        for fila in tabla_productos.get_children():
-            tabla_productos.delete(fila)
-
-        productos = producto_controller.listar_productos()
-
-        for p in productos:
-            tabla_productos.insert("", "end", values=(
-                p.id,
-                p.nombre,
-                p.precio_venta,
-                p.stock
-            ))
-
-    # ========================
-    # OBTENER PRODUCTO
-    # ========================
     def obtener_producto_seleccionado():
-
         seleccion = tabla_productos.selection()
-
         if not seleccion:
-            messagebox.showwarning("Aviso", "Selecciona un producto")
+            messagebox.showwarning("Aviso", "Selecciona un producto del catálogo.")
             return None
+        return tabla_productos.item(seleccion[0])["values"][0]
 
-        item = tabla_productos.item(seleccion[0])
-        datos = item["values"]
-
-        return datos[0]  # ID
-
-    # ========================
-    # INPUT CANTIDAD
-    # ========================
-    tk.Label(scrollable_frame, text="Cantidad").pack()
-    entry_cantidad = tk.Entry(scrollable_frame)
-    entry_cantidad.pack()
-
-    # ========================
-    # AGREGAR AL CARRITO
-    # ========================
     def agregar_al_carrito():
-
         id_producto = obtener_producto_seleccionado()
-
         if not id_producto:
             return
 
         try:
             cantidad = int(entry_cantidad.get())
+            if cantidad <= 0: raise ValueError
         except:
             messagebox.showerror("Error", "Cantidad inválida")
             return
@@ -153,93 +84,66 @@ def abrir_venta_view():
             "precio_compra": producto.precio_compra,
             "precio_venta": producto.precio_venta
         }
-
         carrito.append(item)
-
         actualizar_carrito()
 
-    tk.Button(scrollable_frame, text="Agregar al carrito", command=agregar_al_carrito).pack(pady=5)
+    tb.Button(frame_agregar, text="➕ Añadir al Carrito", command=agregar_al_carrito, bootstyle="success").pack(side=RIGHT, padx=5)
 
     # ========================
-    # TABLA CARRITO
+    # DERECHA: CARRITO
     # ========================
-    tabla_carrito = ttk.Treeview(
-        scrollable_frame,
-        columns=("Nombre", "Cantidad", "Precio", "Subtotal"),
-        show="headings"
-    )
-
+    tabla_carrito = tb.Treeview(frame_der, columns=("Nombre", "Cantidad", "Precio", "Subtotal"), show="headings", bootstyle="info")
     tabla_carrito.heading("Nombre", text="Nombre")
-    tabla_carrito.heading("Cantidad", text="Cantidad")
-    tabla_carrito.heading("Precio", text="Precio")
+    tabla_carrito.heading("Cantidad", text="Cant.")
+    tabla_carrito.heading("Precio", text="Precio Unit.")
     tabla_carrito.heading("Subtotal", text="Subtotal")
+    tabla_carrito.column("Cantidad", width=60, anchor=CENTER)
+    
+    tabla_carrito.pack(fill=BOTH, expand=True, pady=(0, 10))
 
-    tabla_carrito.pack(fill="x", padx=10, pady=10)
+    frame_acciones_carrito = tb.Frame(frame_der)
+    frame_acciones_carrito.pack(fill=X, pady=5)
 
-    # ========================
-    # ACCIONES DEL CARRITO
-    # ========================
+    def modificar_cant(delta):
+        seleccion = tabla_carrito.selection()
+        if not seleccion: return
+        indice = tabla_carrito.index(seleccion[0])
+        item_carrito = carrito[indice]
+        
+        if delta > 0:
+            producto = producto_controller.buscar_producto_por_id(item_carrito["id"])
+            if producto.stock <= item_carrito["cantidad"]:
+                messagebox.showerror("Error", "Stock insuficiente")
+                return
+            item_carrito["cantidad"] += 1
+        else:
+            if item_carrito["cantidad"] > 1:
+                item_carrito["cantidad"] -= 1
+            else:
+                if messagebox.askyesno("Eliminar", "¿Eliminar del carrito?"):
+                    carrito.pop(indice)
+        actualizar_carrito()
+
     def eliminar_del_carrito():
         seleccion = tabla_carrito.selection()
-        if not seleccion:
-            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
-            return
-            
+        if not seleccion: return
         indice = tabla_carrito.index(seleccion[0])
         carrito.pop(indice)
         actualizar_carrito()
 
-    def aumentar_cantidad():
-        seleccion = tabla_carrito.selection()
-        if not seleccion:
-            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
-            return
-            
-        indice = tabla_carrito.index(seleccion[0])
-        item_carrito = carrito[indice]
-        
-        producto = producto_controller.buscar_producto_por_id(item_carrito["id"])
-        if producto.stock <= item_carrito["cantidad"]:
-            messagebox.showerror("Error", "Stock insuficiente")
-            return
-            
-        item_carrito["cantidad"] += 1
-        actualizar_carrito()
+    tb.Button(frame_acciones_carrito, text="➖", command=lambda: modificar_cant(-1), bootstyle="secondary-outline").pack(side=LEFT, padx=2)
+    tb.Button(frame_acciones_carrito, text="➕", command=lambda: modificar_cant(1), bootstyle="secondary-outline").pack(side=LEFT, padx=2)
+    tb.Button(frame_acciones_carrito, text="🗑️ Quitar", command=eliminar_del_carrito, bootstyle="danger-outline").pack(side=LEFT, padx=10)
 
-    def disminuir_cantidad():
-        seleccion = tabla_carrito.selection()
-        if not seleccion:
-            messagebox.showwarning("Aviso", "Selecciona un producto del carrito")
-            return
-            
-        indice = tabla_carrito.index(seleccion[0])
-        item_carrito = carrito[indice]
-        
-        if item_carrito["cantidad"] > 1:
-            item_carrito["cantidad"] -= 1
-            actualizar_carrito()
-        else:
-            if messagebox.askyesno("Eliminar", "¿Deseas eliminar el producto del carrito?"):
-                carrito.pop(indice)
-                actualizar_carrito()
+    # Panel Inferior Facturación
+    panel_factura = tb.Frame(frame_der, bootstyle="light")
+    panel_factura.pack(fill=X, pady=10)
 
-    frame_acciones_carrito = tk.Frame(scrollable_frame)
-    frame_acciones_carrito.pack(pady=5)
+    label_total = tb.Label(panel_factura, text="Total: $0.00", font=("Arial", 20, "bold"), bootstyle="inverse-primary")
+    label_total.pack(fill=X, pady=5)
 
-    tk.Button(frame_acciones_carrito, text="➖ Disminuir", command=disminuir_cantidad).pack(side=tk.LEFT, padx=5)
-    tk.Button(frame_acciones_carrito, text="➕ Aumentar", command=aumentar_cantidad).pack(side=tk.LEFT, padx=5)
-    tk.Button(frame_acciones_carrito, text="Eliminar seleccionado", command=eliminar_del_carrito).pack(side=tk.LEFT, padx=5)
-
-    # ========================
-    # TOTAL, FIADO, PAGO Y CAMBIO
-    # ========================
-    label_total = tk.Label(scrollable_frame, text="Total: $0", font=("Arial", 12, "bold"))
-    label_total.pack(pady=5)
-
-    frame_fiado = tk.Frame(scrollable_frame)
-    frame_fiado.pack(pady=5)
-    
-    es_fiado_var = tk.BooleanVar()
+    # Fiado vs Pago Normal
+    es_fiado_var = tb.BooleanVar()
     
     def toggle_fiado():
         if es_fiado_var.get():
@@ -251,137 +155,112 @@ def abrir_venta_view():
             btn_cambio.config(state="normal")
             entry_cliente.config(state="disabled")
 
-    chk_fiado = tk.Checkbutton(frame_fiado, text="¿Es a crédito (Fiado)?", variable=es_fiado_var, command=toggle_fiado)
-    chk_fiado.pack(side=tk.LEFT)
+    frame_check = tb.Frame(panel_factura)
+    frame_check.pack(fill=X, pady=5)
+    tb.Checkbutton(frame_check, text="¿Venta a Crédito (Fiado)?", variable=es_fiado_var, command=toggle_fiado, bootstyle="warning-round-toggle").pack(side=LEFT)
+    
+    tb.Label(frame_check, text="Cliente:").pack(side=LEFT, padx=(15, 5))
+    entry_cliente = tb.Entry(frame_check, state="disabled")
+    entry_cliente.pack(side=LEFT, fill=X, expand=True)
 
-    tk.Label(frame_fiado, text="Cliente:").pack(side=tk.LEFT, padx=(10, 0))
-    entry_cliente = tk.Entry(frame_fiado, state="disabled")
-    entry_cliente.pack(side=tk.LEFT)
+    frame_pago = tb.Frame(panel_factura)
+    frame_pago.pack(fill=X, pady=5)
+    tb.Label(frame_pago, text="Efectivo Recibido: $").pack(side=LEFT)
+    entry_pago = tb.Entry(frame_pago, width=15)
+    entry_pago.pack(side=LEFT, padx=5)
 
-    frame_pago = tk.Frame(scrollable_frame)
-    frame_pago.pack(pady=5)
-    
-    tk.Label(frame_pago, text="Pago Cliente:").pack(side=tk.LEFT)
-    entry_pago = tk.Entry(frame_pago)
-    entry_pago.pack(side=tk.LEFT)
-    
-    label_cambio = tk.Label(scrollable_frame, text="Cambio: $0")
-    label_cambio.pack()
-    
     def calcular_cambio():
-        total = sum((item["cantidad"] * item["precio_venta"]) for item in carrito)
+        total = sum((i["cantidad"] * i["precio_venta"]) for i in carrito)
         try:
             pago = float(entry_pago.get())
             if pago < total:
                 messagebox.showerror("Error", "El pago es menor al total")
                 return None
             cambio = pago - total
-            label_cambio.config(text=f"Cambio: ${cambio:.2f}")
+            label_cambio.config(text=f"Cambio a Devolver: ${cambio:.2f}")
             return pago, cambio
         except ValueError:
             messagebox.showerror("Error", "Monto de pago inválido")
             return None
 
-    btn_cambio = tk.Button(scrollable_frame, text="Calcular Cambio", command=calcular_cambio)
-    btn_cambio.pack(pady=5)
+    btn_cambio = tb.Button(frame_pago, text="Calcular Cambio", command=calcular_cambio, bootstyle="info-outline")
+    btn_cambio.pack(side=LEFT, padx=5)
+    
+    label_cambio = tb.Label(panel_factura, text="Cambio a Devolver: $0.00", font=("Arial", 12, "bold"), bootstyle="success")
+    label_cambio.pack(pady=5)
 
     # ========================
-    # ACTUALIZAR CARRITO
+    # FUNCIONES PRINCIPALES
     # ========================
+    def cargar_productos():
+        for fila in tabla_productos.get_children():
+            tabla_productos.delete(fila)
+        for p in producto_controller.listar_productos():
+            tabla_productos.insert("", "end", values=(p.id, p.nombre, f"${p.precio_venta:.2f}", p.stock))
+
     def actualizar_carrito():
-
         for fila in tabla_carrito.get_children():
             tabla_carrito.delete(fila)
-
         total = 0
-
         for item in carrito:
+            subt = item["cantidad"] * item["precio_venta"]
+            total += subt
+            tabla_carrito.insert("", "end", values=(item["nombre"], item["cantidad"], f"${item['precio_venta']:.2f}", f"${subt:.2f}"))
+        label_total.config(text=f"Total: ${total:.2f}")
 
-            subtotal = item["cantidad"] * item["precio_venta"]
-            total += subtotal
-
-            tabla_carrito.insert("", "end", values=(
-                item["nombre"],
-                item["cantidad"],
-                item["precio_venta"],
-                subtotal
-            ))
-
-        label_total.config(text=f"Total: ${total}")
-
-    # ========================
-    # CONFIRMAR VENTA
-    # ========================
     def confirmar_venta():
-
         if not carrito:
             messagebox.showwarning("Aviso", "Carrito vacío")
             return
+        total = sum((i["cantidad"] * i["precio_venta"]) for i in carrito)
 
-        total = sum((item["cantidad"] * item["precio_venta"]) for item in carrito)
-
-        # Lógica de Fiado
         if es_fiado_var.get():
             cliente = entry_cliente.get().strip()
             if not cliente:
-                messagebox.showerror("Error", "Debes ingresar el nombre del cliente para un fiado.")
+                messagebox.showerror("Error", "Ingresa el nombre del cliente para el fiado.")
                 return
-            
             deudor_controller.crear_fiado(cliente, carrito)
             messagebox.showinfo("Éxito", f"Cuenta Fiada creada para el cliente: {cliente}\nMonto Total: ${total:.2f}")
-
             carrito.clear()
             actualizar_carrito()
             cargar_productos()
-            entry_cliente.delete(0, tk.END)
+            entry_cliente.delete(0, END)
             es_fiado_var.set(False)
             toggle_fiado()
             return
 
-        # Lógica de Venta Normal
         resultado_pago = calcular_cambio()
-        if not resultado_pago:
-            return
-
+        if not resultado_pago: return
         pago, cambio = resultado_pago
 
-        # guardar venta
         venta_controller.crear_venta(carrito)
 
-
-        # generar ticket
-        if not os.path.exists("tickets"):
-            os.makedirs("tickets")
-            
+        if not os.path.exists("tickets"): os.makedirs("tickets")
         fecha = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         nombre_ticket = f"tickets/ticket_{fecha}.txt"
-        
         with open(nombre_ticket, "w") as file:
             file.write("=== TICKET DE COMPRA ===\n")
             file.write(f"Fecha: {fecha}\n")
             file.write("-" * 25 + "\n")
             for item in carrito:
-                subtotal = item['cantidad'] * item['precio_venta']
-                file.write(f"{item['nombre']} x{item['cantidad']} - ${subtotal:.2f}\n")
+                subt = item['cantidad'] * item['precio_venta']
+                file.write(f"{item['nombre']} x{item['cantidad']} - ${subt:.2f}\n")
             file.write("-" * 25 + "\n")
             file.write(f"Total: ${total:.2f}\n")
             file.write(f"Pago: ${pago:.2f}\n")
             file.write(f"Cambio: ${cambio:.2f}\n")
             file.write("========================\n")
 
-        # actualizar stock
         for item in carrito:
             producto_controller.vender_producto(item["id"], item["cantidad"])
 
         messagebox.showinfo("Éxito", f"Venta realizada\nTicket generado: {nombre_ticket}")
-
         carrito.clear()
         actualizar_carrito()
         cargar_productos()
-        entry_pago.delete(0, tk.END)
-        label_cambio.config(text="Cambio: $0")
+        entry_pago.delete(0, END)
+        label_cambio.config(text="Cambio a Devolver: $0.00")
 
-    tk.Button(scrollable_frame, text="Confirmar venta", font=("Arial", 10, "bold"), fg="blue", command=confirmar_venta).pack(pady=10)
+    tb.Button(frame_der, text="✅ CONFIRMAR VENTA", bootstyle="success", command=confirmar_venta).pack(fill=X, pady=10)
 
-    # iniciar
     cargar_productos()

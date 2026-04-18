@@ -1,24 +1,24 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import ttkbootstrap as tb
+from ttkbootstrap.constants import *
+import tkinter.messagebox as messagebox
 from controllers.deudor_controller import DeudorController
 
 deudor_controller = DeudorController()
 
-def abrir_deudor_view():
-    ventana = tk.Toplevel()
-    ventana.title("Gestión de Deudores (Fiados)")
-    ventana.geometry("800x600")
+def abrir_deudor_view(parent):
+    ventana = parent
 
     # ========================
     # TABLA DEUDORES
     # ========================
-    frame_tabla = tk.LabelFrame(ventana, text="Lista de Deudores")
-    frame_tabla.pack(fill="both", expand=True, padx=10, pady=10)
+    frame_tabla = tb.LabelFrame(ventana, text="Lista de Deudores")
+    frame_tabla.pack(fill=BOTH, expand=True, padx=15, pady=10)
 
-    tabla = ttk.Treeview(
+    tabla = tb.Treeview(
         frame_tabla,
         columns=("ID", "Nombre", "Fecha", "Total", "Estado"),
-        show="headings"
+        show="headings",
+        bootstyle="warning"
     )
 
     tabla.heading("ID", text="ID")
@@ -27,32 +27,37 @@ def abrir_deudor_view():
     tabla.heading("Total", text="Total")
     tabla.heading("Estado", text="Estado")
 
-    tabla.column("ID", width=50, anchor="center")
-    tabla.column("Nombre", anchor="w")
-    tabla.column("Fecha", anchor="center")
-    tabla.column("Total", width=100, anchor="center")
-    tabla.column("Estado", width=100, anchor="center")
+    tabla.column("ID", width=70, anchor=CENTER)
+    tabla.column("Nombre", anchor=W)
+    tabla.column("Fecha", anchor=CENTER)
+    tabla.column("Total", width=120, anchor=E)
+    tabla.column("Estado", width=120, anchor=CENTER)
 
-    tabla.pack(fill="both", expand=True, padx=5, pady=5)
+    tabla.pack(fill=BOTH, expand=True)
 
     # ========================
     # DETALLE DE PRODUCTOS
     # ========================
-    frame_detalle = tk.LabelFrame(ventana, text="Detalle de Productos Fiados")
-    frame_detalle.pack(fill="both", expand=True, padx=10, pady=5)
+    frame_detalle = tb.LabelFrame(ventana, text="Detalle de Productos Fiados")
+    frame_detalle.pack(fill=BOTH, expand=True, padx=15, pady=5)
 
-    tabla_detalle = ttk.Treeview(
+    tabla_detalle = tb.Treeview(
         frame_detalle,
         columns=("Nombre", "Cantidad", "Precio", "Subtotal"),
-        show="headings"
+        show="headings",
+        bootstyle="info"
     )
 
     tabla_detalle.heading("Nombre", text="Nombre")
     tabla_detalle.heading("Cantidad", text="Cantidad")
     tabla_detalle.heading("Precio", text="Precio Unit.")
     tabla_detalle.heading("Subtotal", text="Subtotal")
+    
+    tabla_detalle.column("Cantidad", anchor=CENTER)
+    tabla_detalle.column("Precio", anchor=E)
+    tabla_detalle.column("Subtotal", anchor=E)
 
-    tabla_detalle.pack(fill="both", expand=True, padx=5, pady=5)
+    tabla_detalle.pack(fill=BOTH, expand=True)
 
     def cargar_datos():
         for fila in tabla.get_children():
@@ -100,7 +105,7 @@ def abrir_deudor_view():
     # ========================
     # ACCIONES
     # ========================
-    frame_acciones = tk.Frame(ventana)
+    frame_acciones = tb.Frame(ventana)
     frame_acciones.pack(pady=10)
 
     def marcar_pagado():
@@ -126,7 +131,7 @@ def abrir_deudor_view():
             else:
                 messagebox.showerror("Error", mensaje)
 
-    tk.Button(frame_acciones, text="Marcar como Pagado", font=("Arial", 10, "bold"), fg="green", command=marcar_pagado).pack(side="left", padx=5)
-    tk.Button(frame_acciones, text="Actualizar Lista", command=cargar_datos).pack(side="left", padx=5)
+    tb.Button(frame_acciones, text="💲 Marcar como Pagado", bootstyle="success", command=marcar_pagado).pack(side=LEFT, padx=5)
+    tb.Button(frame_acciones, text="🔄 Actualizar Lista", command=cargar_datos, bootstyle="secondary-outline").pack(side=LEFT, padx=5)
 
     cargar_datos()

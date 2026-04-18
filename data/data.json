@@ -13,7 +13,7 @@
             "nombre": "Arroz",
             "precio_compra": 0.0,
             "precio_venta": 1.0,
-            "stock": 24,
+            "stock": 21,
             "activo": true
         },
         {
@@ -377,6 +377,21 @@
                 }
             ],
             "total": 5.0
+        },
+        {
+            "id": 17,
+            "fecha": "2026-04-17 19:24:39",
+            "items": [
+                {
+                    "producto_id": 2,
+                    "nombre": "Arroz",
+                    "precio_venta": 1.0,
+                    "precio_compra": 0.0,
+                    "cantidad": 3,
+                    "subtotal": 3.0
+                }
+            ],
+            "total": 3.0
         }
     ],
     "gastos": [

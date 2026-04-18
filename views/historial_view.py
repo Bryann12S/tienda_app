@@ -1,59 +1,57 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import ttkbootstrap as tb
+from ttkbootstrap.constants import *
+import tkinter.messagebox as messagebox
 from controllers.venta_controller import VentaController
 from controllers.deudor_controller import DeudorController
 
 venta_controller = VentaController()
 deudor_controller = DeudorController()
 
-def abrir_historial_view():
+def abrir_historial_view(parent):
 
-    ventana = tk.Toplevel()
-    ventana.title("Historial de Ventas y Reportes")
-    ventana.geometry("850x600")
+    ventana = parent
 
     # ========================
     # PANEL DE REPORTES Y FILTROS
     # ========================
-    frame_top = tk.Frame(ventana, bg="#f0f0f0", pady=10, padx=10)
-    frame_top.pack(fill="x", side="top")
+    frame_top = tb.Frame(ventana, padding=15)
+    frame_top.pack(fill=X, side=TOP)
 
     # Filtros
-    frame_filtros = tk.Frame(frame_top, bg="#f0f0f0")
-    frame_filtros.pack(side="left", fill="y")
+    frame_filtros = tb.LabelFrame(frame_top, text="Filtros")
+    frame_filtros.pack(side=LEFT, fill=Y, padx=(0, 10))
     
-    tk.Label(frame_filtros, text="📅 Filtrar por fecha (YYYY-MM-DD):", bg="#f0f0f0").pack(anchor="w")
+    tb.Label(frame_filtros, text="Fecha (YYYY-MM-DD):").pack(anchor=W)
     
-    frame_input = tk.Frame(frame_filtros, bg="#f0f0f0")
-    frame_input.pack(fill="x")
+    frame_input = tb.Frame(frame_filtros)
+    frame_input.pack(fill=X, pady=5)
     
-    entry_fecha = tk.Entry(frame_input, width=15)
-    entry_fecha.pack(side="left", padx=(0, 5))
+    entry_fecha = tb.Entry(frame_input, width=15)
+    entry_fecha.pack(side=LEFT, padx=(0, 5))
 
     # Métricas
-    frame_metricas = tk.Frame(frame_top, bg="#f0f0f0")
-    frame_metricas.pack(side="right", fill="both", expand=True)
+    frame_metricas = tb.LabelFrame(frame_top, text="Resumen Financiero")
+    frame_metricas.pack(side=LEFT, fill=BOTH, expand=True)
 
-    lbl_ventas_totales = tk.Label(frame_metricas, text="📈 Ventas Totales: $0.00", font=("Arial", 10, "bold"), bg="#f0f0f0")
-    lbl_ventas_totales.grid(row=0, column=0, padx=10, pady=2, sticky="w")
+    lbl_ventas_totales = tb.Label(frame_metricas, text="📈 Ventas Totales: $0.00", font=("Arial", 11, "bold"), bootstyle="primary")
+    lbl_ventas_totales.grid(row=0, column=0, padx=15, pady=5, sticky=W)
 
-    lbl_ganancias_reales = tk.Label(frame_metricas, text="✅ Ganancias Reales: $0.00", font=("Arial", 10, "bold"), bg="#f0f0f0")
-    lbl_ganancias_reales.grid(row=0, column=1, padx=10, pady=2, sticky="w")
+    lbl_ganancias_reales = tb.Label(frame_metricas, text="✅ Ganancias Reales: $0.00", font=("Arial", 11, "bold"), bootstyle="success")
+    lbl_ganancias_reales.grid(row=0, column=1, padx=15, pady=5, sticky=W)
 
-    lbl_deben = tk.Label(frame_metricas, text="🛑 Cuánto te deben: $0.00", font=("Arial", 10, "bold"), bg="#f0f0f0")
-    lbl_deben.grid(row=1, column=0, padx=10, pady=2, sticky="w")
+    lbl_deben = tb.Label(frame_metricas, text="🛑 Cuánto te deben: $0.00", font=("Arial", 11, "bold"), bootstyle="warning")
+    lbl_deben.grid(row=1, column=0, padx=15, pady=5, sticky=W)
 
-    lbl_perdidas = tk.Label(frame_metricas, text="📉 Pérdidas (Costo): $0.00", font=("Arial", 10, "bold"), bg="#f0f0f0")
-    lbl_perdidas.grid(row=1, column=1, padx=10, pady=2, sticky="w")
+    lbl_perdidas = tb.Label(frame_metricas, text="📉 Pérdidas (Costo): $0.00", font=("Arial", 11, "bold"), bootstyle="danger")
+    lbl_perdidas.grid(row=1, column=1, padx=15, pady=5, sticky=W)
 
-    lbl_producto = tk.Label(frame_metricas, text="🏆 Más vendido: Ninguno (0)", font=("Arial", 10, "bold"), bg="#f0f0f0")
-    lbl_producto.grid(row=0, column=2, rowspan=2, padx=10, pady=2, sticky="w")
+    lbl_producto = tb.Label(frame_metricas, text="🏆 Más vendido: Ninguno (0)", font=("Arial", 11, "bold"), bootstyle="info")
+    lbl_producto.grid(row=0, column=2, rowspan=2, padx=15, pady=5, sticky=W)
 
     # Funciones de filtrado y reporte
     def aplicar_filtro():
         fecha = entry_fecha.get().strip()
         if fecha:
-            # Validar formato simple
             if len(fecha) != 10 or fecha.count("-") != 2:
                 messagebox.showerror("Error", "Formato de fecha inválido. Usa YYYY-MM-DD")
                 return
@@ -63,50 +61,60 @@ def abrir_historial_view():
         cargar_ventas_y_reportes(fecha)
 
     def limpiar_filtro():
-        entry_fecha.delete(0, tk.END)
+        entry_fecha.delete(0, 'end')
         cargar_ventas_y_reportes(None)
 
-    tk.Button(frame_input, text="Filtrar", command=aplicar_filtro).pack(side="left")
-    tk.Button(frame_input, text="Limpiar", command=limpiar_filtro).pack(side="left", padx=5)
-
+    tb.Button(frame_input, text="🔍 Filtrar", command=aplicar_filtro, bootstyle="primary").pack(side=LEFT)
+    tb.Button(frame_input, text="🗑️ Limpiar", command=limpiar_filtro, bootstyle="secondary").pack(side=LEFT, padx=5)
 
     # ========================
     # TABLA VENTAS
     # ========================
-    frame_ventas = tk.LabelFrame(ventana, text="Historial de Ventas")
-    frame_ventas.pack(fill="both", expand=True, padx=10, pady=5)
+    frame_ventas = tb.LabelFrame(ventana, text="Historial General (Ventas y Fiados)")
+    frame_ventas.pack(fill=BOTH, expand=True, padx=15, pady=5)
 
-    tabla = ttk.Treeview(
+    tabla = tb.Treeview(
         frame_ventas,
         columns=("ID", "Fecha", "Total", "Estado"),
-        show="headings"
+        show="headings",
+        bootstyle="primary"
     )
 
     tabla.heading("ID", text="ID/Tipo")
     tabla.heading("Fecha", text="Fecha")
     tabla.heading("Total", text="Total")
     tabla.heading("Estado", text="Estado")
+    
+    tabla.column("ID", width=100, anchor=CENTER)
+    tabla.column("Fecha", anchor=CENTER)
+    tabla.column("Total", width=150, anchor=E)
+    tabla.column("Estado", width=150, anchor=CENTER)
 
-    tabla.pack(fill="both", expand=True, padx=5, pady=5)
+    tabla.pack(fill=BOTH, expand=True)
 
     # ========================
     # DETALLE
     # ========================
-    frame_detalle = tk.LabelFrame(ventana, text="Detalle de Venta Seleccionada")
-    frame_detalle.pack(fill="both", expand=True, padx=10, pady=5)
+    frame_detalle = tb.LabelFrame(ventana, text="Detalle de Venta Seleccionada")
+    frame_detalle.pack(fill=BOTH, expand=True, padx=15, pady=5)
 
-    tabla_detalle = ttk.Treeview(
+    tabla_detalle = tb.Treeview(
         frame_detalle,
         columns=("Nombre", "Cantidad", "Precio", "Subtotal"),
-        show="headings"
+        show="headings",
+        bootstyle="info"
     )
 
     tabla_detalle.heading("Nombre", text="Nombre")
     tabla_detalle.heading("Cantidad", text="Cantidad")
-    tabla_detalle.heading("Precio", text="Precio")
+    tabla_detalle.heading("Precio", text="Precio Unit.")
     tabla_detalle.heading("Subtotal", text="Subtotal")
+    
+    tabla_detalle.column("Cantidad", anchor=CENTER)
+    tabla_detalle.column("Precio", anchor=E)
+    tabla_detalle.column("Subtotal", anchor=E)
 
-    tabla_detalle.pack(fill="both", expand=True, padx=5, pady=5)
+    tabla_detalle.pack(fill=BOTH, expand=True)
 
     def marcar_pagado():
         seleccion = tabla.selection()
@@ -134,8 +142,8 @@ def abrir_historial_view():
                 else:
                     messagebox.showerror("Error", msg)
 
-    btn_pagar = tk.Button(frame_detalle, text="Marcar como Pagado", font=("Arial", 10, "bold"), fg="blue", command=marcar_pagado)
-    btn_pagar.pack(pady=5)
+    btn_pagar = tb.Button(frame_detalle, text="💲 Marcar Deuda como Pagada", bootstyle="success", command=marcar_pagado)
+    btn_pagar.pack(pady=10)
 
     # ========================
     # CARGAR VENTAS Y REPORTES
