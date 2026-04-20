@@ -127,6 +127,22 @@
             "precio_venta": 0.25,
             "stock": 21,
             "activo": true
+        },
+        {
+            "id": 17,
+            "nombre": "Pepsi Cola",
+            "precio_compra": 7.0,
+            "precio_venta": 1.25,
+            "stock": 6,
+            "activo": true
+        },
+        {
+            "id": 18,
+            "nombre": "Guitic",
+            "precio_compra": 10.0,
+            "precio_venta": 0.75,
+            "stock": 12,
+            "activo": true
         }
     ],
     "ventas": [
@@ -582,7 +598,7 @@
             ],
             "total": 1.0,
             "estado": "pendiente",
-            "abonado": 0.0,
+            "abonado": 0.5,
             "fecha_limite": "2026-04-20"
         }
     ]

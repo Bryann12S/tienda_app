@@ -125,13 +125,14 @@ def abrir_deudor_view(parent):
     tabla = tb.Treeview(frame_der, columns=("ID", "Nombre", "Límite", "Total", "Abonado", "Restante", "Estado"), show="headings", bootstyle="warning")
     for col in ("ID", "Nombre", "Límite", "Total", "Abonado", "Restante", "Estado"):
         tabla.heading(col, text=col)
-    tabla.column("ID", width=40)
-    tabla.column("Límite", width=80, anchor=CENTER)
-    tabla.column("Total", width=80, anchor=E)
-    tabla.column("Abonado", width=80, anchor=E)
-    tabla.column("Restante", width=80, anchor=E)
-    tabla.column("Estado", width=80, anchor=CENTER)
-    tabla.pack(fill=BOTH, expand=True, pady=5)
+        tabla.column("ID", width=40)
+        tabla.column("Nombre", width=55)
+        tabla.column("Límite", width=80, anchor=CENTER)
+        tabla.column("Total", width=55, anchor=CENTER)
+        tabla.column("Abonado", width=55, anchor=CENTER)
+        tabla.column("Restante", width=55, anchor=CENTER)
+        tabla.column("Estado", width=60, anchor=CENTER)
+        tabla.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
     def cargar_productos():
         for f in tabla_disp.get_children(): tabla_disp.delete(f)
